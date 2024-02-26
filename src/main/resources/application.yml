@@ -1,0 +1,61 @@
+server:
+  port: 8080
+  shutdown: graceful
+  netty:
+    connection-timeout: 2s
+    idle-timeout: 15s
+  compression:
+    enabled: true
+    mime-types: application/json, application/xml
+    min-response-size: 2048
+  error:
+    include-exception: true
+    include-stacktrace: always
+    include-binding-errors: always
+    include-message: always
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: citas-api
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    time-zone: "America/Bogota"
+    deserialization:
+      fail-on-unknown-properties: false
+      accept-float-as-int: false
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  r2dbc:
+    url: ${URL_DB}
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
+    pool:
+      max-size: 10
+      initial-size: 5
+      max-create-connection-time: 2s
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+
+management:
+  endpoint:
+    health:
+      show-details: never
+      enabled: true
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /console
+      path-mapping:
+        health: health
+
+logging:
+  level:
+    root: INFO
+    web: INFO
+    org.springframework.web: TRACE
